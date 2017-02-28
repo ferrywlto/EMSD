@@ -1,0 +1,631 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+					   xmlns:s="library://ns.adobe.com/flex/spark"
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   currentState="Login"
+					   width="1920" height="1080" backgroundColor.Login="#FFFFFF" xmlns:local="*" 
+					   creationPolicy="all" showStatusBar="false"
+					   addedToStage="windowedapplication1_addedToStageHandler(event)" resize="windowedapplication1_resizeHandler(event)">
+	<s:states>
+		<s:State name="Login" enterState="CommonStateEnter(event)"/>
+		<s:State name="Config"  enterState="CommonStateEnter(event)"/>
+		<s:State name="DefaultVideo" enterState="CommonStateEnter(event)" exitState="CommonStateExit(event)"/>
+		<s:State name="AllVideo" enterState="CommonStateEnter(event)" exitState="CommonStateExit(event)" />
+		<s:State name="PipVideo" enterState="CommonStateEnter(event)" exitState="CommonStateExit(event)" />
+	</s:states>
+	<s:layout.DefaultVideo>
+		<s:BasicLayout/>
+	</s:layout.DefaultVideo>
+	<s:layout.Config>
+		<s:BasicLayout/>
+	</s:layout.Config>
+	<s:layout.Login>
+		<s:BasicLayout/>
+	</s:layout.Login>
+	<s:layout.AllVideo>
+		<s:BasicLayout/>
+	</s:layout.AllVideo>
+	<s:layout.PipVideo>
+		<s:BasicLayout/>
+	</s:layout.PipVideo>
+	<s:Label id="lblTime" depth="5" includeIn="DefaultVideo,PipVideo" width="100%" top="0" height="4%" 
+			 enterFrame="lblTime_enterFrameHandler(event)" text="2011/01/01 23:59:59"
+			 textAlign="right" verticalAlign="middle"/>
+
+	<s:Group id="pipVidGroup" includeIn="PipVideo" depth="1" width="100%" height="100%" creationComplete="pipVidGroup_creationCompleteHandler(event)">
+		<local:VideoContainer id="pip_bcVid0" depth="0" top="0" left="0" width="100%" height="100%"/>
+		<local:DraggableVideoContainer id="pip_bcVid1" depth="0" x="32" y="237" width="30%" height="30%"/>
+	</s:Group>
+	
+	<s:VGroup id="main_group" includeIn="DefaultVideo,PipVideo,AllVideo" width="100%" height="100%" depth="2"
+			  gap="50" horizontalAlign="center" verticalAlign="middle" x.AllVideo="0" y.AllVideo="0"
+			  horizontalCenter.DefaultVideo="0" verticalCenter.DefaultVideo="0"
+			  horizontalCenter.PipVideo="0" verticalCenter.PipVideo="350">
+		<s:HGroup id="defVidHGroup" includeIn="DefaultVideo" width="100%"
+				  height="46.5%" creationComplete="defVidHGroupComplete(event)" depth="2" gap="50"
+				  horizontalAlign="center" paddingLeft="50" paddingRight="50" verticalAlign="middle">
+			<local:VideoContainer id="default_bcVid0" width="50%" height="100%"/>
+			<local:VideoContainer id="default_bcVid1" width="50%" height="100%"/>
+		</s:HGroup>
+		<s:VGroup id="allVidGroup" includeIn="AllVideo" width="100%" height="65%" depth="3" gap="50" 
+				  horizontalAlign="center" paddingLeft="50" paddingRight="50" verticalAlign="middle"
+				  creationComplete="allVidGroup_creationCompleteHandler(event)">
+			<s:HGroup width="100%" height="50%" gap="50">
+				<local:VideoContainer id="all_bcVid0" width="33%" height="100%"/>
+				<local:VideoContainer id="all_bcVid1" width="33%" height="100%"/>
+				<local:VideoContainer id="all_bcVid2" width="33%" height="100%"/>
+			</s:HGroup>
+			<s:HGroup width="100%" height="50%" gap="50">
+				<local:VideoContainer id="all_bcVid3" width="33%" height="100%"/>
+				<local:VideoContainer id="all_bcVid4" width="33%" height="100%"/>
+				<local:VideoContainer id="all_bcVid5" width="33%" height="100%"/>				
+			</s:HGroup>
+		</s:VGroup>
+		<s:HGroup id="btnBarHGroup" includeIn="DefaultVideo,PipVideo,AllVideo" width="100%" height="10%" bottom.PipVideo="0" bottom.AllVideo="0"
+				  columnWidth="128" creationComplete="btnBarHGroup_creationCompleteHandler(event)"
+				  depth="4" gap="25" paddingLeft="100" paddingRight="100" requestedColumnCount="8">
+			<s:BorderContainer id="btnGrp0" width="12.5%" height="100%" dropShadowVisible="true">
+				<s:Image id="btnImgTh0" scaleMode="stretch" smooth="true"
+						 source="../assets/theatre1.jpg" x="0" y="0" width="100%" height="100%" />
+				<s:Label id="txtRmNameA" x="0" bottom="0" width="100%" color="#FFFFFF" fontSize="14"
+						 textAlign="center" verticalAlign="middle" backgroundAlpha="0.75" backgroundColor="#666666"/>
+			</s:BorderContainer>
+			<s:BorderContainer id="btnGrp1" width="12.5%" height="100%" dropShadowVisible="true">
+				<s:Image id="btnImgTh1" x="0" y="0" width="100%" height="100%"
+						 scaleMode="stretch" smooth="true" source="../assets/theatre2.jpg"/>
+				<s:Label id="txtRmNameB" x="0" bottom="0" width="100%" color="#FFFFFF" fontSize="14"
+						 textAlign="center" verticalAlign="middle" backgroundAlpha="0.75" backgroundColor="#666666"/>
+			</s:BorderContainer>
+			<s:BorderContainer id="btnGrp2" width="12.5%" height="100%" dropShadowVisible="true">
+				<s:Image id="btnImgTh2" x="0" y="0" width="100%" height="100%"
+						 scaleMode="stretch" smooth="true" source="../assets/theatre3.jpg"/>
+				<s:Label id="txtRmNameC" x="0" bottom="0" width="100%" color="#FFFFFF" fontSize="14"
+						 textAlign="center" verticalAlign="middle" backgroundAlpha="0.75" backgroundColor="#666666"/>
+			</s:BorderContainer>
+			<s:BorderContainer id="btnGrp3" width="12.5%" height="100%" dropShadowVisible="true">
+				<s:Image id="btnImgTh3" x="0" y="0" width="100%" height="100%"
+						 scaleMode="stretch" smooth="true" source="../assets/theatre4.jpg"/>
+				<s:Label id="txtRmNameD" x="0" bottom="0" width="100%" color="#FFFFFF" fontSize="14"
+						 textAlign="center" verticalAlign="middle" backgroundAlpha="0.75" backgroundColor="#666666"/>
+			</s:BorderContainer>
+			<s:BorderContainer id="btnGrp4" width="12.5%" height="100%" dropShadowVisible="true">
+				<s:Image id="btnImgTh4" x="0" y="0" width="100%" height="100%"
+						 scaleMode="stretch" smooth="true" source="../assets/theatre5.jpg"/>
+				<s:Label id="txtRmNameE" x="0" bottom="0" width="100%" color="#FFFFFF" fontSize="14"
+						 textAlign="center" verticalAlign="middle" backgroundAlpha="0.75" backgroundColor="#666666"/>
+			</s:BorderContainer>
+			<s:BorderContainer id="btnGrp5" width="12.5%" height="100%" dropShadowVisible="true">
+				<s:Image id="btnImgTh5" x="0" y="0" width="100%" height="100%"
+						 scaleMode="stretch" smooth="true" source="../assets/theatre6.jpg"/>
+				<s:Label id="txtRmNameF" x="0" bottom="0" width="100%" color="#FFFFFF" fontSize="14"
+						 textAlign="center" verticalAlign="middle" backgroundAlpha="0.75" backgroundColor="#666666"/>
+			</s:BorderContainer>
+			<s:BorderContainer id="btnGrpAllVid" width="12.5%" height="100%" dropShadowVisible="true">
+				<s:Image id="btnAllVid" width="100%" height="100%" source="../assets/6vids.png" scaleMode="stretch" smooth="true"/>			
+			</s:BorderContainer>
+			<s:BorderContainer id="btnGrpConfig" width="12.5%" height="100%" dropShadowVisible="true">
+				<s:Image id="btnConfig" width="100%" height="100%" source="../assets/config.png" scaleMode="stretch" smooth="true"/>			
+			</s:BorderContainer>
+		</s:HGroup>
+	</s:VGroup>
+	<s:Panel id="panelLogin" includeIn="Login" depth="6" width="318" height="200" horizontalCenter="0" verticalCenter="0" 
+			 title="Please Login" addedToStage="panelLogin_addedToStageHandler(event)">
+		<s:Image id="imgLogo" x="10" y="2" source="../assets/emsd_logo_chi.png"/>
+		<s:TextInput id="txtLogin" x="128" y="70" text="administrator"/>
+		<s:TextInput id="txtPw" x="128" y="102" displayAsPassword="true" text="password"/>
+		<s:Button id="btnOK" x="186" y="136" label="Login" click="btnOK_clickHandler(event)"/>
+		<s:Label id="lblPw" x="60" y="107" text="Password:"/>
+		<s:Label id="lblLogin" x="60" y="75" text="Username:"/>
+	</s:Panel>
+	<s:Panel includeIn="Config" width="558" height="232" depth="7" horizontalCenter="3"
+			 textAlign="left" title="Connection Settings" verticalCenter="55">
+		<s:VGroup x="0" y="0" width="100%" height="100%" gap="1" paddingBottom="5" paddingLeft="5"
+				  paddingRight="5" paddingTop="5" requestedRowCount="2">
+			<s:HGroup width="100%" height="12.5%" verticalAlign="middle">
+				<s:VGroup includeIn="Config" width="60" height="100%" gap="10" paddingBottom="5"
+						  paddingLeft="5" paddingRight="5" paddingTop="5" requestedRowCount="7">
+					<mx:Spacer/>
+					<s:Label height="0"/>
+					<s:Label text="Camera A:"/>
+					<s:Label text="Camera B:"/>
+					<s:Label text="Camera C:"/>
+					<s:Label text="Camera D:"/>
+					<s:Label text="Camera E:"/>
+					<s:Label text="Camera F:"/>
+				</s:VGroup>
+				<s:VGroup includeIn="Config" width="236" height="100%" gap="0" horizontalAlign="left"
+						  paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
+						  requestedRowCount="7">
+					<s:Label text="URL"/>
+					<s:TextInput id="txtStreamA" width="100%"/>
+					<s:TextInput id="txtStreamB" width="100%"/>
+					<s:TextInput id="txtStreamC" width="100%"/>
+					<s:TextInput id="txtStreamD" width="100%"/>
+					<s:TextInput id="txtStreamE" width="100%"/>
+					<s:TextInput id="txtStreamF" width="100%"/>
+				</s:VGroup>
+				<s:VGroup includeIn="Config" width="30%" height="100%" gap="0" horizontalAlign="left"
+						  paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
+						  requestedRowCount="7">
+					<s:Label text="Name"/>
+					<s:TextInput id="txtNameA" text="Meeting Room A"/>
+					<s:TextInput id="txtNameB" text="Meeting Room B"/>
+					<s:TextInput id="txtNameC" text="Control Room A"/>
+					<s:TextInput id="txtNameD" text="Control Room B"/>
+					<s:TextInput id="txtNameE" text="Exit"/>
+					<s:TextInput id="txtNameF" text="Operation Room"/>
+				</s:VGroup>
+				<s:VGroup includeIn="Config" width="97" height="100%" gap="3" horizontalAlign="left"
+						  paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
+						  requestedRowCount="7">
+					<s:Label text="Enabled"/>
+					<s:HGroup width="200" height="19" paddingLeft="3">
+						<s:RadioButton label="Yes"/>
+						<s:RadioButton label="No"/>
+					</s:HGroup>
+					<s:HGroup width="200" height="19" paddingLeft="3">
+						<s:RadioButton label="Yes"/>
+						<s:RadioButton label="No"/>
+					</s:HGroup>
+					<s:HGroup width="200" height="19" paddingLeft="3">
+						<s:RadioButton label="Yes"/>
+						<s:RadioButton label="No"/>
+					</s:HGroup>
+					<s:HGroup width="200" height="19" paddingLeft="3">
+						<s:RadioButton label="Yes"/>
+						<s:RadioButton label="No"/>
+					</s:HGroup>
+					<s:HGroup width="200" height="19" paddingLeft="3">
+						<s:RadioButton label="Yes"/>
+						<s:RadioButton label="No"/>
+					</s:HGroup>
+					<s:HGroup width="200" height="19" paddingLeft="3">
+						<s:RadioButton label="Yes" selected="true"/>
+						<s:RadioButton label="No"/>
+					</s:HGroup>
+				</s:VGroup>
+			</s:HGroup>
+			<s:HGroup width="549" height="31" paddingLeft="5" verticalAlign="middle">
+				<s:Label text="Local Camera:"/>
+				<s:DropDownList id="ddlDefVid" width="53" dataProvider="{vidChannels}" labelField="label"></s:DropDownList>
+				<s:Button id="btnSaveConfig" label="Save" click="btnSaveConfig_clickHandler(event)"/>
+			</s:HGroup>
+		</s:VGroup>
+	</s:Panel>
+	<s:Image id="imgBackground" includeIn="Login,Config,DefaultVideo,AllVideo,PipVideo" left="0"
+			 top="0" width="100%" height="100%" depth="0" scaleMode="stretch" smooth="false"
+			 source="../assets/bg_blue_gradient_00.jpg"/>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.core.mx_internal;
+			import mx.events.DragEvent;
+			import mx.events.FlexEvent;
+			import mx.events.ResizeEvent;
+			import mx.messaging.channels.StreamingAMFChannel;
+			
+			import org.osmf.containers.MediaContainer;
+			import org.osmf.layout.HorizontalAlign;
+			import org.osmf.layout.LayoutMetadata;
+			import org.osmf.layout.ScaleMode;
+			import org.osmf.layout.VerticalAlign;
+			import org.osmf.media.MediaPlayer;
+			import org.osmf.media.MediaPlayerSprite;
+			import org.osmf.media.URLResource;
+			import org.osmf.net.StreamType;
+			import org.osmf.net.StreamingURLResource;
+			
+			import spark.core.SpriteVisualElement;
+			import spark.events.IndexChangeEvent;
+			import spark.filters.DropShadowFilter;
+			import spark.filters.GlowFilter;
+			
+			private static const 
+				CONFIG_FILE_NAME:String = "config.xml",
+				MAX_VIDEO_NUM:uint = 6;
+			
+			private var	
+				pip_bigVidRes:Object,
+				pip_smallVidRes:Object,
+				default_leftVid_res:Object,
+				default_rightVid_res:Object,
+
+				imgBtnCList:CycleDisplayList,
+				bcCList_default:CycleDisplayList,
+				bcCList_pip:CycleDisplayList,
+				bcCList_all:CycleDisplayList,
+				
+				vfxPlane:SpriteVisualElement,
+				displayGlowAgent:SpriteVisualElement, 
+				channelGlowAgent:SpriteVisualElement,
+				displayGlow:BlurHighlighter, 
+				channelGlow:BlurHighlighter,
+				
+				configXML:XML,
+				selectedVidIdx:uint,
+				keyCmd:KeyboardCommander,
+				sndLocator:SoundLocator,
+				previousState:String;
+			
+			[Bindable]
+			public var vidChannels:ArrayCollection = new ArrayCollection([
+				{label:"A", data:"A"}, {label:"B", data:"B"}, {label:"C", data:"C"},
+				{label:"D", data:"D"}, {label:"E", data:"E"}, {label:"F", data:"F"}]);
+			
+			/** Misc helper */
+			protected function LoginMode():void { previousState = null; currentState = "Login"; }
+			protected function DefaultMode():void{ previousState = currentState; currentState = "DefaultVideo"; }
+			protected function ConfigMode():void{ previousState = currentState; currentState = "Config"; }
+			protected function AllVideoMode():void{ previousState = currentState; currentState = "AllVideo"; }
+			protected function PipVideoMode():void{ previousState = currentState; currentState = "PipVideo"; }
+			protected function PreviousMode():void
+			{
+				var tmpState:String = currentState;
+				currentState = previousState;
+				previousState = tmpState;
+			} 
+
+			protected function setRoomName():void
+			{
+				if(txtRmNameA !=null)
+				{
+					txtRmNameA.text = configXML.room[0].name;
+					txtRmNameB.text = configXML.room[1].name;
+					txtRmNameC.text = configXML.room[2].name;
+					txtRmNameD.text = configXML.room[3].name;
+					txtRmNameE.text = configXML.room[4].name;
+					txtRmNameF.text = configXML.room[5].name;
+				}
+			}
+			protected function StopAllHighlighting():void
+			{
+				if(displayGlow!=null){displayGlow.StopGlow();}
+				if(channelGlow!=null){channelGlow.StopGlow();}
+			}
+			protected function StopVideo(vc:VideoContainer):void{
+				if(vc!=null){vc.stopVideo();}
+			}
+			protected function CommonStateEnter(event:Event):void
+			{
+				switch(currentState)
+				{
+					case "Login": 
+						if(stage!=null){ stage.focus = txtLogin; }
+						previousState = null;
+						break;
+					
+					case "DefaultVideo":
+						btnBarHGroup.alpha = 1;
+						default_leftVid_res = pip_bigVidRes;
+						default_rightVid_res = pip_smallVidRes;
+						
+						// get default channel
+						if(default_leftVid_res == null){
+							for(var i:uint=0; i<MAX_VIDEO_NUM; i++){
+								if(configXML.default == configXML.room[i].@label){
+									default_leftVid_res = configXML.room[i];
+									break;
+								}
+							}
+						}
+						if(default_leftVid_res != null){ default_bcVid0.channel = default_leftVid_res; }
+						if(default_rightVid_res != null){ default_bcVid1.channel = default_rightVid_res; }												
+						if(default_bcVid0.hasInitialized) { default_bcVid0.playVideo(); }
+						if(default_bcVid1.hasInitialized) { default_bcVid1.playVideo(); }	
+						break;
+					
+					case "PipVideo": 
+						btnBarHGroup.alpha = 0;
+						pip_bcVid0.channel = pip_bigVidRes;
+						pip_bcVid1.channel = pip_smallVidRes;
+						if(pip_bcVid0.hasInitialized){ pip_bcVid0.playVideo(); }
+						if(pip_bcVid1.hasInitialized){ pip_bcVid1.playVideo(); }
+						break;
+					
+					case "AllVideo":
+						btnBarHGroup.alpha = 1;
+						all_bcVid0.channel = configXML.room[0];
+						all_bcVid1.channel = configXML.room[1];
+						all_bcVid2.channel = configXML.room[2];
+						all_bcVid3.channel = configXML.room[3];
+						all_bcVid4.channel = configXML.room[4];
+						all_bcVid5.channel = configXML.room[5];
+						
+						if(all_bcVid0.hasInitialized){ all_bcVid0.playVideo(); }
+						if(all_bcVid1.hasInitialized){ all_bcVid1.playVideo(); }
+						if(all_bcVid2.hasInitialized){ all_bcVid2.playVideo(); }
+						if(all_bcVid3.hasInitialized){ all_bcVid3.playVideo(); }
+						if(all_bcVid4.hasInitialized){ all_bcVid4.playVideo(); }
+						if(all_bcVid5.hasInitialized){ all_bcVid5.playVideo(); }
+						break;
+					
+					case "Config":
+						txtStreamA.text = configXML.room[0].stream;
+						txtStreamB.text = configXML.room[1].stream;
+						txtStreamC.text = configXML.room[2].stream;
+						txtStreamD.text = configXML.room[3].stream;
+						txtStreamE.text = configXML.room[4].stream;
+						txtStreamF.text = configXML.room[5].stream;
+						
+						txtNameA.text = configXML.room[0].name;
+						txtNameB.text = configXML.room[1].name;
+						txtNameC.text = configXML.room[2].name;
+						txtNameD.text = configXML.room[3].name;
+						txtNameE.text = configXML.room[4].name;
+						txtNameF.text = configXML.room[5].name;
+						for(var j:uint=0; j<MAX_VIDEO_NUM; j++){
+							if(ddlDefVid.dataProvider.getItemAt(j).data == configXML.default){
+								ddlDefVid.selectedItem = ddlDefVid.dataProvider.getItemAt(j);
+								break;
+							}
+						}
+						break;
+					default: break;
+				}
+				setRoomName();
+				if(stage!=null){
+					stage.focus = stage;
+				}
+				if(vfxPlane!=null){
+					vfxPlane.depth = 6;
+					vfxPlane.x = vfxPlane.y = 0;
+				}
+			}
+			protected function CommonStateExit(event:Event):void{
+				StopAllHighlighting();
+				switch(currentState)
+				{
+					case "Login": break;
+					case "DefaultVideo":
+						StopVideo(default_bcVid0);
+						StopVideo(default_bcVid1);
+						break;
+					case "PipVideo": 
+						StopVideo(pip_bcVid0);
+						StopVideo(pip_bcVid1);
+						break;
+					case "AllVideo":
+						StopVideo(all_bcVid0);
+						StopVideo(all_bcVid1);
+						StopVideo(all_bcVid2);
+						StopVideo(all_bcVid3);
+						StopVideo(all_bcVid4);
+						StopVideo(all_bcVid5);
+						break;
+					case "Config": break;
+					default: break;
+				}
+			}
+			protected function lblTime_enterFrameHandler(event:Event):void
+			{
+				lblTime.text = "Current Time: "+new Date().toLocaleString();
+			}
+			
+			// stage property only available after addedToStage event fires!!!!!
+			protected function windowedapplication1_addedToStageHandler(event:Event):void
+			{
+				//trace("windowedapplication1_addedToStageHandler");
+				configXML = XMLConfiguration.loadConfigXML(CONFIG_FILE_NAME);
+				stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+				
+				displayGlowAgent = new SpriteVisualElement();
+				channelGlowAgent = new SpriteVisualElement();
+				
+				displayGlow = new BlurHighlighter(0x00FFFF,1,7,7,3);
+				displayGlow.SetGlowAgent(displayGlowAgent);
+				channelGlow = new BlurHighlighter(0x00FFFF,1,7,7,3);
+				channelGlow.SetGlowAgent(channelGlowAgent);
+				
+				vfxPlane = new SpriteVisualElement();
+				vfxPlane.addChild(displayGlowAgent);
+				vfxPlane.addChild(channelGlowAgent);
+				addElement(vfxPlane);
+				SetupKeyHandler();
+				sndLocator = SoundLocator.getInstance();
+				sndLocator.playStartUpSnd();
+			}
+			protected function windowedapplication1_resizeHandler(event:ResizeEvent):void { CommonStateExit(event); }
+
+			/** Login State */
+			protected function btnOK_clickHandler(event:MouseEvent):void { DefaultMode(); }
+			protected function panelLogin_addedToStageHandler(event:Event):void	{ stage.focus = txtLogin; }
+			
+			/** Default State */
+			protected function defVidHGroupComplete(event:FlexEvent):void
+			{
+				if(bcCList_default == null)
+				{
+					bcCList_default = new CycleDisplayList();
+					bcCList_default.add(default_bcVid0);
+					bcCList_default.add(default_bcVid1);
+				}
+				default_bcVid0.playVideo();
+				default_bcVid1.playVideo();
+			}
+			protected function btnBarHGroup_creationCompleteHandler(event:FlexEvent):void
+			{
+				if(imgBtnCList == null)
+				{
+					imgBtnCList = new CycleDisplayList();
+					imgBtnCList.add(btnGrp0);
+					imgBtnCList.add(btnGrp1);
+					imgBtnCList.add(btnGrp2);
+					imgBtnCList.add(btnGrp3);
+					imgBtnCList.add(btnGrp4);
+					imgBtnCList.add(btnGrp5);
+					imgBtnCList.add(btnGrpAllVid);
+					imgBtnCList.add(btnGrpConfig);	
+				}
+			}
+			/** PIP state */
+			protected function pipVidGroup_creationCompleteHandler(event:FlexEvent):void
+			{
+				if(bcCList_pip == null)
+				{
+					bcCList_pip = new CycleDisplayList();
+					bcCList_pip.add(pip_bcVid0);
+					bcCList_pip.add(pip_bcVid1);
+				}
+				pip_bcVid0.playVideo();
+				pip_bcVid1.playVideo();
+			}
+			
+			/** 6 screen state */
+			protected function allVidGroup_creationCompleteHandler(event:FlexEvent):void
+			{
+				if(bcCList_all == null)
+				{
+					bcCList_all = new CycleDisplayList();
+					bcCList_all.add(all_bcVid0);
+					bcCList_all.add(all_bcVid1);
+					bcCList_all.add(all_bcVid2);
+					bcCList_all.add(all_bcVid3);
+					bcCList_all.add(all_bcVid4);
+					bcCList_all.add(all_bcVid5);	
+				}
+				all_bcVid0.playVideo();
+				all_bcVid1.playVideo();
+				all_bcVid2.playVideo();
+				all_bcVid3.playVideo();
+				all_bcVid4.playVideo();
+				all_bcVid5.playVideo();
+			}
+			
+			/** Config State */
+			protected function btnSaveConfig_clickHandler(event:MouseEvent):void
+			{
+				event.stopPropagation();
+				configXML.room[0].stream = txtStreamA.text;
+				configXML.room[1].stream = txtStreamB.text;
+				configXML.room[2].stream = txtStreamC.text;
+				configXML.room[3].stream = txtStreamD.text;
+				configXML.room[4].stream = txtStreamE.text;
+				configXML.room[5].stream = txtStreamF.text;
+				
+				configXML.room[0].name = txtNameA.text;
+				configXML.room[1].name = txtNameB.text;
+				configXML.room[2].name = txtNameC.text;
+				configXML.room[3].name = txtNameD.text;
+				configXML.room[4].name = txtNameE.text;
+				configXML.room[5].name = txtNameF.text;
+				configXML.default = ddlDefVid.selectedItem.data;
+				
+				// Must use this pattern for writing files.
+				XMLConfiguration.saveConfigXML(configXML, File.applicationDirectory.nativePath.toString()+"/"+CONFIG_FILE_NAME);
+				DefaultMode();
+				setRoomName();
+			}
+			/** Button Bar */
+
+			/** Keyboard related */
+			private var selectedVC:VideoContainer;
+			private var selectedBtn:DisplayObject;
+			private var selectedChannelID:uint;
+			
+			public function SetupKeyHandler():void
+			{
+				keyCmd = KeyboardCommander.getInstance();
+				keyCmd.rightarrow = HighlightRight;
+				keyCmd.leftarrow = HighlightLeft;
+				keyCmd.tab = HighlightNextDisplay;
+				keyCmd.enter = PlayVideo;
+				keyCmd.backspace = BackToPreviousMode;
+				keyCmd.plus = IncreaseVolume;
+				keyCmd.minus = DecreaseVolume;
+				keyCmd.charM = MuteSound;
+				keyCmd.charH = HomeScreen;
+				stage.addEventListener(KeyboardEvent.KEY_DOWN, keyCmd.H_onKeyDown); 
+			}
+			
+			public function PlayVideo():void
+			{
+				StopAllHighlighting();
+				if(selectedVC!=null && selectedChannelID<6)
+				{
+					if(currentState == "DefaultVideo" && selectedVC.channel == configXML.room[selectedChannelID])
+					{
+						if(selectedVC == default_bcVid0){
+							pip_bigVidRes = default_leftVid_res;
+							pip_smallVidRes = default_rightVid_res;
+						}
+						else if(selectedVC == default_bcVid1){
+							pip_bigVidRes = default_rightVid_res;
+							pip_smallVidRes = default_leftVid_res;
+						}
+						PipVideoMode();
+					}
+					else if(selectedVC.channel != configXML.room[selectedChannelID])
+					{
+						selectedVC.channel = configXML.room[selectedChannelID];
+						selectedVC.playVideo();
+						switch(selectedVC)
+						{
+							case default_bcVid0: default_leftVid_res = selectedVC.channel; break;
+							case default_bcVid1: default_rightVid_res = selectedVC.channel; break;
+							case pip_bcVid0: pip_bigVidRes = selectedVC.channel; break;
+							case pip_bcVid1: pip_smallVidRes = selectedVC.channel; break;
+							default: break;
+						}
+						if(currentState == "PipVideo"){
+							btnBarHGroup.alpha = 0;
+						}
+					}
+					sndLocator.playSelectSnd();
+				}
+				else if(selectedChannelID == 6){ AllVideoMode(); }
+				else if(selectedChannelID == 7){ ConfigMode();	}
+			}
+			public function HomeScreen():void { if(currentState!="Login"){DefaultMode();} }
+			public function BackToPreviousMode():void {	if(previousState != null) {	PreviousMode();	} }
+			public function HighlightRight():void {	HighlightThumbnail(imgBtnCList.next());	}
+			public function HighlightLeft():void { HighlightThumbnail(imgBtnCList.prev());	}
+			protected function HighlightThumbnail(disObj:DisplayObject):void
+			{
+				switch(currentState){
+					case "PipVideo": 
+						btnBarHGroup.alpha = 0.5; // notice no break here.
+					case "AllVideo":
+					case "DefaultVideo":
+						selectedBtn = disObj;
+						selectedChannelID = imgBtnCList.curIdx;
+						channelGlow.Glow(disObj);
+						sndLocator.playNavigateSnd();
+						break;
+					default: break;
+				}				
+			}
+			public function HighlightNextDisplay():void
+			{
+				var tmpList:CycleDisplayList;
+				switch(currentState)
+				{
+					case "DefaultVideo": tmpList = bcCList_default; break;
+					case "PipVideo": tmpList = bcCList_pip; break;
+					case "AllVideo": tmpList = bcCList_all; break;
+					default: break;
+				}
+				if(currentState == "DefaultVideo" || currentState == "PipVideo" || currentState == "AllVideo")
+				{
+					selectedVC = tmpList.next() as VideoContainer;
+					displayGlow.Glow(selectedVC);
+					sndLocator.playNavigateSnd();
+				}
+			}
+			public function MuteSound():void{
+				if(currentState != "Login" && currentState != "Config"){
+					selectedVC.Mute();
+				}
+			}
+			public function SetSound(vol:Number):void{
+				if(currentState != "Login" && currentState != "Config"){
+					if(selectedVC!=null){
+						selectedVC.SetVolume(vol);	
+					}
+				}
+			}
+			public function IncreaseVolume():void{ SetSound(0.1); }
+			public function DecreaseVolume():void{ SetSound(-0.1) }
+		]]>
+	</fx:Script>
+</s:WindowedApplication>

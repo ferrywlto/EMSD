@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+	<s:BorderContainer backgroundColor="#999999" depth="0" width="100%" height="100%" dropShadowVisible="true"					   
+					   creationComplete="bordercontainer1_creationCompleteHandler(event)"/>
+	<s:VGroup id="grpUI" depth="2" bottom="0" width="100%">
+		<s:HGroup id="grpVidPlaybackUI" width="100%" alpha="0" gap="0" verticalAlign="middle" horizontalAlign="left" 
+				  mouseOut="grpVidPlaybackUI_mouseOutHandler(event)"
+				  mouseOver="grpVidPlaybackUI_mouseOverHandler(event)" >
+			<s:Image id="imgVol" click="imgVol_clickHandler(event)"/>
+			<s:HSlider id="sldVol" right="5" maximum="100" minimum="0" value="10" change="sldVol_onChange(event)"/>
+		</s:HGroup>
+		<s:Label id="lblVid" width="100%" backgroundAlpha="0.5" alpha="0" backgroundColor="#A8A2A2" color="#FFFFFF" fontSize="16" textAlign="center" verticalAlign="middle"/>
+	</s:VGroup>
+	<fx:Script>
+		<![CDATA[
+			import flashx.textLayout.formats.VerticalAlign;
+			
+			import mx.core.BitmapAsset;
+			import mx.events.FlexEvent;
+			import mx.events.MoveEvent;
+			import mx.events.ResizeEvent;
+			
+			import org.osmf.layout.HorizontalAlign;
+			import org.osmf.layout.LayoutMetadata;
+			import org.osmf.layout.ScaleMode;
+			import org.osmf.media.MediaPlayerSprite;
+			import org.osmf.net.StreamType;
+			import org.osmf.net.StreamingURLResource;
+			
+			import spark.core.SpriteVisualElement;
+
+			private static var layoutMetaData:LayoutMetadata;
+			
+			private var 
+				sprElement:SpriteVisualElement,
+				vidSprite:MediaPlayerSprite,
+				
+				isInitialized:Boolean = false,
+				isPlaying:Boolean = false,
+				isMuted:Boolean = false,
+				
+				currentStream:String,
+				currentVolume:Number,
+				funcDClick:Function,
+				labelTimer:Timer,
+				channelObj:Object;
+			
+			public function get hasInitialized():Boolean { return isInitialized; }
+			public function set channel(obj:Object):void{ channelObj = obj; }
+			public function get channel():Object{ return channelObj; }
+			protected function bordercontainer1_creationCompleteHandler(event:FlexEvent):void {	init();	}
+			
+			public function init(hasLabel:Boolean=true, hasVolume:Boolean=true):void
+			{
+				VideoContainerAssets.init();
+				if(!isInitialized)
+				{
+					if(!hasLabel && lblVid != null){ grpUI.removeElement(lblVid); }
+					if(!hasVolume && sldVol != null)
+					{
+						sldVol.removeEventListener(Event.CHANGE, sldVol_onChange);
+						grpVidPlaybackUI.removeElement(sldVol);
+					}
+					sprElement = new SpriteVisualElement();
+					vidSprite = new MediaPlayerSprite();
+					sprElement.addChild(vidSprite);
+					addElementAt(sprElement,1);
+
+					if(layoutMetaData == null)
+					{
+						layoutMetaData = new LayoutMetadata();
+						layoutMetaData.verticalAlign = VerticalAlign.MIDDLE;
+						layoutMetaData.horizontalAlign = HorizontalAlign.CENTER;
+						layoutMetaData.percentWidth = 100;
+						layoutMetaData.percentHeight = 100;
+						layoutMetaData.scaleMode = ScaleMode.LETTERBOX;
+					}
+
+					currentVolume = sldVol.value/100;
+					imgVol.source = VideoContainerAssets.BMPVolOpen;
+					labelTimer = new Timer(8000,1);
+					labelTimer.addEventListener(TimerEvent.TIMER, H_onLabelTimer);
+					isInitialized = true;
+				}
+			}
+			
+			public function SetVolume(offset:Number):void
+			{
+				if(vidSprite != null)
+				{
+					currentVolume += offset;
+					if(currentVolume < 0){ currentVolume = 0; }
+					else if(currentVolume > 1){ currentVolume = 1; }
+					
+					sldVol.value = currentVolume*100;
+					if(!isMuted){ vidSprite.mediaPlayer.volume = currentVolume; }
+				}	
+			}
+			public function stopVideo():void
+			{
+				vidSprite.resource = null;
+				isPlaying = false;
+			}
+			public function playVideo():void
+			{
+				if(channelObj != null && vidSprite != null)
+				{
+					vidSprite.resource = null;
+					vidSprite.resource = new StreamingURLResource(channelObj.stream, StreamType.LIVE_OR_RECORDED);
+					vidSprite.width = this.width;
+					vidSprite.height = this.height;
+					vidSprite.media.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutMetaData);
+					vidSprite.scaleMode = ScaleMode.LETTERBOX;
+					vidSprite.mediaPlayer.volume = currentVolume;
+
+					isPlaying = true;
+					lblVid.text = channelObj.name
+					lblVid.alpha = 0.5;
+					labelTimer.start();
+				}
+			}
+			public function Mute():void
+			{
+				if(isPlaying){
+					isMuted = !isMuted;
+					imgVol.source = isMuted ? VideoContainerAssets.BMPVolMute : VideoContainerAssets.BMPVolOpen;
+					vidSprite.mediaPlayer.muted = isMuted;
+					vidSprite.mediaPlayer.volume = currentVolume;
+				}
+			}
+			
+			protected function H_onLabelTimer(evt:TimerEvent):void
+			{
+				labelTimer.stop();
+				lblVid.alpha = 0;
+			}
+			
+			protected function sldVol_onChange(event:Event):void
+			{
+				event.stopPropagation();
+				if(vidSprite != null)
+				{
+					currentVolume = sldVol.value/100;
+					if(!isMuted){ vidSprite.mediaPlayer.volume = currentVolume;	}
+				}	
+			}
+			protected function grpVidPlaybackUI_mouseOverHandler(event:MouseEvent):void
+			{
+				event.stopPropagation();
+				grpVidPlaybackUI.alpha = 0.5;
+			}
+			protected function grpVidPlaybackUI_mouseOutHandler(event:MouseEvent):void
+			{
+				event.stopPropagation();
+				grpVidPlaybackUI.alpha = 0;
+			}
+
+			protected function imgVol_clickHandler(event:MouseEvent):void
+			{
+				event.stopPropagation();
+				Mute();
+			}
+		]]>
+	</fx:Script>
+</s:Group>
